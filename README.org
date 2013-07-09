@@ -1,0 +1,11 @@
+* A pinentry that uses emacsclient to prompt for the passphrase
+
+Put it somewhere, make it executable, tell =gpg= to use it as the
+pinentry program.
+
+If your emacs hangs, you might have to =C-g=, then you'll get asked,
+then you may have to restart the action. Your passphrase will be
+cached for some time.
+
+This is probably totally insecure, and your passphrase may be leaked!
+*Use at your own risk!*
