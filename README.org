@@ -1,9 +1,16 @@
-* A pinentry that uses emacsclient to prompt for the passphrase
+* =pinentry-emacs=
 
 Put it somewhere, make it executable, tell =gpg= to use it as the
 pinentry program.
 
-If your emacs hangs, you might have to =C-g=, then you'll get asked,
+One way to do this is adding the line
+: pinentry-program /path/to/where/you/put/pinentry-emacs
+to the file =~/.gnupg/gpg-agent.conf=.
+
+Make sure you restart gpg-agent and GPG_AGENT_INFO is set correctly
+inside Emacs!
+
+If your Emacs hangs, you might have to =C-g=, then you'll get asked,
 then you may have to restart the action. Your passphrase will be
 cached for some time.
 ** Emacs
