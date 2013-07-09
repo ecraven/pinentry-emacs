@@ -6,6 +6,14 @@ pinentry program.
 If your emacs hangs, you might have to =C-g=, then you'll get asked,
 then you may have to restart the action. Your passphrase will be
 cached for some time.
+** Emacs
+Add this to =.emacs.d/init.el= or similar:
+
+#+BEGIN
+(defun pinentry-emacs (desc prompt ok error)
+  (let ((str (read-passwd (concat (replace-regexp-in-string "%22" "\"" (replace-regexp-in-string "%0A" "\n" desc)) prompt ": "))))
+    str)) 
+#+END
 
 This is probably totally insecure, and your passphrase may be leaked!
 *Use at your own risk!*
