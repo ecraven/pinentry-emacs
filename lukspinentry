@@ -1,0 +1,80 @@
+#!/usr/bin/perl -w
+# Copyright 2014 Daniel Jay Haskin.
+# Taken from http://blog.sanctum.geek.nz/linux-crypto-disks/#comment-16505 ,
+# no copyright violation intended.
+#
+# The original source of the script seems to be from
+# http://rantanplan.org/%7Erupi/kvmscripts/ , here, which lists the
+# license under which this script was written as the GPLv3. Therefore, the
+# script is covered under the GPLv3 license.
+#
+# This program (`lukspinentry`) is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+use strict;
+use utf8;
+use FileHandle;
+use IPC::Opben2;
+use Env qw( LC_CTYPE DISPLAY SSH_TTY );
+
+my $arg = shift(@ARGV);
+
+# open pinentry
+my $pid = "";
+if ( defined($DISPLAY) && !defined($SSH_TTY) ) {
+    $pid = open2(*IN, *OUT, "pinentry-x11 -g") || die;
+} else {
+    # get a tty
+    open F, "tty |" || die ("can't fork to tty");
+    my $tty = <F>;
+    close F;
+    $pid = open2(*IN, *OUT, "pinentry-curses --ttyname $tty") || die;
+}
+
+my $lctype = "en_US.UTF-8";
+if ( defined($LC_CTYPE) ) {
+    $lctype = $LC_CTYPE;
+}
+print OUT "OPTION lc-ctype=$lctype\n";
+
+############################################################################
+sub getpass($) {
+    my $prompt = shift;
+#   print OUT "SETDESC LUKS Passphrase\nSETPROMPT $prompt\nGETPIN\n";
+    print OUT "SETPROMPT $prompt\nGETPIN\n";
+    while ( <IN> ) {
+        if ( /^OK/ ) {
+            next;
+        } elsif ( /^ERR \d+ (.*)/ ) {
+            print STDERR $1."\n";
+            exit 1;
+            last;
+        } elsif ( /^D (.*)/ ) {
+            return $1;
+        }
+    }
+}
+
+if ( defined($arg) &&  $arg eq "invalid" ) {
+    print OUT "SETERROR Invalid Passphrase, try again\n";
+}
+
+my $p = getpass("Enter Passphrase");
+if ( defined($arg) &&  $arg eq "confirm" ) {
+    while ( $p ne getpass("Confirm Passphrase") ) {
+        print OUT "SETDESC Passhphrases do not match\nMESSAGE\n";
+        $p = getpass("Re-Enter passphrase");
+    }
+}
+
+print "$p";
