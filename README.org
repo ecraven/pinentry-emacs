@@ -19,12 +19,13 @@ cached for some time.
 ** Emacs
 Add this to =.emacs.d/init.el= or similar:
 
-:(defun pinentry-emacs (desc prompt ok error)
-:  (let ((str (read-passwd (concat (replace-regexp-in-string "%22" "\"" (replace-regexp-in-string "%0A" "\n" desc)) prompt ": "))))
-:    str))
+: (defun pinentry-emacs (desc prompt ok error)
+:   (let ((str (read-passwd (concat (replace-regexp-in-string "%22" "\"" (replace-regexp-in-string "%0A" "\n" desc)) prompt ": "))))
+:     str))
 
-Sometimes your `.emacs` file has errors, or the emacs `pinentry` thing simply doesn't work. In
-that case, this script falls back to using `lukspinentry` to get the password.
+Sometimes your `.emacs` file has errors, or the emacs `pinentry` thing simply
+doesn't work. In that case, this script falls back to using `lukspinentry` to
+get the password (which falls back onto gui/tty pinentry).
 
 This is probably totally insecure, and your passphrase may be leaked!
 *Use at your own risk!*
