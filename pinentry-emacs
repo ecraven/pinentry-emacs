@@ -2,45 +2,50 @@
 echo OK
 while read cmd rest
 do
-case $cmd in
-SETDESC)
-DESC=$rest
-echo OK
-;;
-SETPROMPT)
-PROMPT=$rest
-echo OK
-;;
-SETOK)
-OK=$rest
-echo OK
-;;
-SETERROR)
-ERROR=$rest
-echo OK
-;;
-GETPIN)
-RES=$(emacsclient -e "(pinentry-emacs \"$DESC\" \"$PROMPT\" \"$OK\" \"$ERROR\")" | sed -e 's/^"//' -e 's/"$//')
-echo D $RES
-echo OK
-;;
-OPTION)
-echo OK
-;;
-GETINFO)
-case $rest in
-pid*)
-echo D $$
-echo OK
-esac
-;;
-BYE)
-echo OK
-exit
-;;
-*)
-echo OK
-;;
+    case $cmd in
+        SETDESC)
+            DESC=$rest
+            echo OK
+        ;;
+        SETPROMPT)
+            PROMPT=$rest
+            echo OK
+        ;;
+        SETOK)
+            OK=$rest
+            echo OK
+        ;;
+        SETERROR)
+            ERROR=$rest
+            echo OK
+        ;;
+        GETPIN)
 
-esac
+            RES=$(emacsclient -e "(pinentry-emacs \"$DESC\" \"$PROMPT\" \"$OK\" \"$ERROR\")" | sed -e 's/^"//' -e 's/"$//')
+            if [ $? -ne 0 ]
+            then
+                RES=$(lukspinentry)
+            fi
+            echo D $RES
+            echo OK
+        ;;
+        OPTION)
+            echo OK
+        ;;
+        GETINFO)
+            case $rest in
+                pid*)
+                    echo D $$
+                    echo OK
+                ;;
+            esac
+        ;;
+        BYE)
+            echo OK
+            exit
+        ;;
+        *)
+            echo OK
+        ;;
+    esac
 done
