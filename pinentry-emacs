@@ -37,6 +37,11 @@ do
                 pid*)
                     echo D $$
                     echo OK
+                flavor)
+                    echo OK
+                ;;
+                version)
+                    echo OK
                 ;;
             esac
         ;;
