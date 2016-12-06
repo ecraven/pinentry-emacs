@@ -1,7 +1,10 @@
 #!/bin/bash
+# echo -n "started: " >> /tmp/pinentry.log
+# date >> /tmp/pinentry.log
 echo OK
 while read cmd rest
 do
+#    echo $cmd $rest >> /tmp/pinentry.log
     case $cmd in
         SETDESC)
             DESC=$rest
@@ -37,7 +40,15 @@ do
                 pid*)
                     echo D $$
                     echo OK
-                ;;
+                    ;;
+                version)
+                    echo D 1.0.0
+                    echo OK
+                    ;;
+                flavor*)
+                    echo D curses:curses
+                    echo OK
+                    ;;
             esac
         ;;
         BYE)
