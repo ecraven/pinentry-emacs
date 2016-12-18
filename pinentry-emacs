@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o pipefail
 echo OK
 while read cmd rest
 do
