@@ -10,6 +10,9 @@ do
             fi
             echo OK
         ;;
+        CONFIRM)
+            echo ASSUAN_Not_Confirmed
+        ;;
         SETPROMPT)
             PROMPT=$rest
             echo OK
