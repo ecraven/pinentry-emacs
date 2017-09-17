@@ -44,6 +44,9 @@ do
                 version)
                     echo OK
                 ;;
+                ttyinfo)
+                    echo OK
+                ;;
             esac
         ;;
         BYE)
