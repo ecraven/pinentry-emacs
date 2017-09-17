@@ -5,6 +5,9 @@ do
     case $cmd in
         SETDESC)
             DESC=$rest
+            if [ ${DESC: -3} != '%0A' ]; then
+                DESC="$DESC%0A"
+            fi
             echo OK
         ;;
         SETPROMPT)
