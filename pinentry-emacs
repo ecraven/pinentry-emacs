@@ -44,7 +44,15 @@ do
                 pid*)
                     echo D $$
                     echo OK
-                ;;
+                    ;;
+                version)
+                    echo D 1.0.0
+                    echo OK
+                    ;;
+                flavor*)
+                    echo D curses:curses
+                    echo OK
+                    ;;
             esac
         ;;
         BYE)
