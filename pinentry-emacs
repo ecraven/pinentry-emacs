@@ -53,6 +53,10 @@ do
                     echo D curses:curses
                     echo OK
                     ;;
+                ttyinfo*)
+                    echo "D - - -"
+                    echo OK
+                    ;;
             esac
         ;;
         BYE)
