@@ -45,6 +45,15 @@ do
                     echo D $$
                     echo OK
                 ;;
+                flavor)
+                    echo OK
+                ;;
+                version)
+                    echo OK
+                ;;
+                ttyinfo)
+                    echo OK
+                ;;
             esac
         ;;
         BYE)
